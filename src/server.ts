@@ -29,7 +29,19 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //! END @TODO1
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
-  
+  app.get('/filteredimage',  async ( req, res ) => {
+    let { image_url }  = req.query;
+    if  (!image_url) {
+      
+      return res.status(422).send('URL is required');
+    }
+    var filteredImage =  await filterImageFromURL(image_url);
+    await res.status(200).sendFile(filteredImage, function deleteImage() {
+
+      deleteLocalFiles([filteredImage]);
+    });
+        
+});
 
   
  
